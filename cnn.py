@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
 
+#The ####... means that in future these methods will be private
+
+
 class CNN:
 
 	'''
@@ -13,7 +16,7 @@ class CNN:
 
 	'''
 
-	def convolution(self, filter, image, bias, stride=1):
+	def convolution(self, filter, image, bias, stride=1): ################################################################################################################
 		
 		(n_filters, n_channels, size_f, _) = filter.shape
 
@@ -60,7 +63,7 @@ class CNN:
 				@stride: Step that will control Pooling . Default: 2
 	'''
 
-	def maxPooling(self, image, kernel=2, stride=2):
+	def maxPooling(self, image, kernel=2, stride=2): ################################################################################################################
 
 		(n_channels, size_img, _) = image.shape
 
@@ -91,7 +94,38 @@ class CNN:
 		Paramas: @image: Image in format (n_channels, size, size)
 	'''
 
-	def __flatten(self, image):
+	def flatten(self, image):	################################################################################################################
 		(n_channels, size, _) = image.shape
 		flat = image.reshape((n_channels * size * size, 1))
 		return flat
+
+
+	'''
+		Private method to feed foward fully connected layer
+		Params: @prev_layer: Outputs from previous layer (n, 1)
+				@w: Weights that connect both layers (m, n)
+				@b: Bias of each neuron (m,  1)
+	'''
+	def dense(self, prev_layer, w, b): ###########################################################################################################
+		#Certifies that shapes are correct to multiply
+		assert prev_layer.shape[0] == w.shape[1]
+		assert w.shape[0] == b.shape[0]
+
+		#Multiplies the values
+		y = w.dot(prev_layer) + b
+
+		output = self.__ReLU(y)
+
+		return output
+
+	'''
+		Private method to calcule ReLU function
+		Params: @data: Data that will be mapped 
+	'''
+
+	def __ReLU(self, data):
+
+		data [data <= 0] = 0
+
+		return data
+
