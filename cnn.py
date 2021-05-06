@@ -50,3 +50,38 @@ class CNN:
 				out_row += 1
 
 		return output
+
+
+
+	'''
+		Method to downsample image using MaxPooling
+		Params: @image: Image in format (n_channels, size, size)
+				@kernel: size of MaxPooling kernel. Default: 2
+				@stride: Step that will control Pooling . Default: 2
+	'''
+
+	def maxPooling(self, image, kernel=2, stride=2):
+
+		(n_channels, size_img, _) = image.shape
+
+		#calculates size of output image
+		output_size = int((size_img - kernel)/stride) + 1 
+
+		#Creates output image
+		output = np.zeros((n_channels, output_size, output_size))
+		
+		#Starts sweep
+		for resource_map in range(n_channels):
+			out_row = 0
+			#Sweeps vertically
+			for i in range(0, size_img - kernel + 1, stride):
+				out_col = 0
+				#Sweeps horizontally
+				for j in range(0, size_img - kernel + 1, stride):
+					#MaxPooling. the output[row, col] will be max value of the kernelxkernel window
+					output[resource_map, out_row, out_col] = np.max(image[resource_map, i:i+kernel, j:j+kernel])
+					out_col += 1
+				out_row += 1
+
+
+		return output

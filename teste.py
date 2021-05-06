@@ -6,3 +6,9 @@ bias = np.zeros((8, 1))
 net = cnn.CNN()
 
 output = net.convolution(filter, image, bias)
+
+print(output.shape)
+
+output = net.maxPooling(output)
+
+print(output.shape)
