@@ -7,6 +7,11 @@ import numpy as np
 
 class CNN:
 
+	def __init__(self, inputShape=(0, 0, 0)):
+		self.__input_channels = inputShape[0]
+		self.__input_size = inputShape[1]
+
+
 	'''
 		Method to concolve the image.
 		Params: @filter: filter in format (n_filters, n_channels, size, size)
@@ -108,8 +113,8 @@ class CNN:
 	'''
 	def dense(self, prev_layer, w, b): ###########################################################################################################
 		#Certifies that shapes are correct to multiply
-		assert prev_layer.shape[0] == w.shape[1]
-		assert w.shape[0] == b.shape[0]
+		assert prev_layer.shape[0] == w.shape[1], 'Invalid shapes of prev_layer and weights'
+		assert w.shape[0] == b.shape[0], 'Invalid shapes of weights and bias'
 
 		#Multiplies the values
 		y = w.dot(prev_layer) + b
@@ -117,6 +122,17 @@ class CNN:
 		output = self.__ReLU(y)
 
 		return output
+
+	'''
+		Private method to calculate categorical cross entropy loss function
+		Params: @measure: Output calculated by the fully connected layers
+				@real: Real output
+	'''
+	def __categoricalCrossEntropy(self, measure, real):
+
+		output = -np.sum(real * np.log(measure))
+		return output
+
 
 	'''
 		Private method to calcule ReLU function
@@ -128,4 +144,34 @@ class CNN:
 		data [data <= 0] = 0
 
 		return data
+
+	'''
+		Private method to map outputs to softmax function
+		Params: @data: Data that will be mapped
+	'''
+
+	def __softmax(self, data):
+		output = np.exp(data)
+		output /= np.sum(output)
+		return output
+
+	'''
+		Method to set input shape to CNN. Starts to define the weights
+		params: @input: input shape (n_channels, size, size) format
+	'''
+
+	def set_inputShape(self, input):
+		(self.__input_channels, self.__input_size, _) = input.shape
+
+	'''
+		Method to get the input size of the CNN
+	'''
+
+	def get_inputShape(self):
+		return (self.__input_channels, self.__input_size, self.__input_size)
+
+
+	
+
+
 
