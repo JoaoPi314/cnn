@@ -85,3 +85,13 @@ class CNN:
 
 
 		return output
+
+	'''
+		Private method to flatten image after convolutional layers
+		Paramas: @image: Image in format (n_channels, size, size)
+	'''
+
+	def __flatten(self, image):
+		(n_channels, size, _) = image.shape
+		flat = image.reshape((n_channels * size * size, 1))
+		return flat
